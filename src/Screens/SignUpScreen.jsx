@@ -50,7 +50,7 @@ const SignUpScreen = ({navigation}) => {
     },
     validate,
     onSubmit: values => {
-      Alert.alert('Congratulations', 'You are logged in successfully');
+      Alert.alert('Account created successfully');
       navigation.navigate('Login');
     },
   });
