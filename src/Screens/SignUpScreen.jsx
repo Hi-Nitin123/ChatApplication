@@ -11,13 +11,15 @@ import {
   Form,
 } from 'react-native';
 import {useFormik} from 'formik';
+// import firebase from '../Database/fireBaseDb';
+// import {auth} from '../Database/fireBaseDb';
+// import {createUserWithEmailAndPassword} from 'firebase/auth';
 
 const validate = values => {
-  console.log('called');
+  console.log('values', values);
   const errors = {};
-  console.log(!values.userName, 'sdgfyudgfgfjgsdjhdgf');
+  console.log(values.userName, 'xyz');
   if (values.userName === '') {
-    console.log(values, 'sdgfyudgfgfjgsdjhdgf');
     errors.userName = 'Required';
   }
 
@@ -31,11 +33,12 @@ const validate = values => {
     errors.password = 'Required';
   }
 
-  if (values.consfirmPassword === '') {
-    errors.consfirmPassword = 'Required';
-  } else if (!values.password === values.consfirmPassword) {
-    errors.consfirmPassword = 'Passwords do not match';
+  if (values.confirmPassword && values.confirmPassword === '') {
+    errors.confirmPassword = 'Required';
+  } else if (values.password != values.confirmPassword) {
+    errors.confirmPassword = 'Passwords do not match';
   }
+  console.log(values.password, values.confirmPassword, 'showbool');
 
   return errors;
 };
@@ -46,10 +49,20 @@ const SignUpScreen = ({navigation}) => {
       userName: '',
       email: '',
       password: '',
-      consfirmPassword: '',
+      confirmPassword: '',
     },
     validate,
     onSubmit: values => {
+      // createUserWithEmailAndPassword(values.email, values.password)
+      //   .then(res => {
+      //     console.log(res, 'showdata');
+      //     (values.userName = ''),
+      //       (values.email = ''),
+      //       (values.password = ''),
+      //       (values.confirmPassword = '');
+      //     navigation.navigate('Login');
+      //   })
+      //   .catch(err => console.log(err, 'showError'));
       Alert.alert('Account created successfully');
       navigation.navigate('Login');
     },
@@ -61,10 +74,10 @@ const SignUpScreen = ({navigation}) => {
 
       <TextInput
         style={styles.inputStyle}
-        onChange={formik.handleChange('userName')}
+        onChangeText={formik.handleChange('userName')}
         onBlur={formik.handleBlur('userName')}
         value={formik.values.userName}
-        placeholder="Enter userName"
+        placeholder="Full Name"
       />
       {formik.errors.userName && formik.touched.userName ? (
         <Text style={styles.errorContainer}>{formik.errors.userName}</Text>
@@ -72,7 +85,7 @@ const SignUpScreen = ({navigation}) => {
 
       <TextInput
         style={styles.inputStyle}
-        onChange={formik.handleChange('email')}
+        onChangeText={formik.handleChange('email')}
         onBlur={formik.handleBlur('email')}
         value={formik.values.email}
         placeholder="Enter Email"
@@ -85,7 +98,7 @@ const SignUpScreen = ({navigation}) => {
         style={styles.inputStyle}
         type="password"
         placeholder="Enter Password"
-        onChange={formik.handleChange('password')}
+        onChangeText={formik.handleChange('password')}
         onBlur={formik.handleBlur('password')}
         value={formik.values.password}
         secureTextEntry={true}
@@ -97,14 +110,14 @@ const SignUpScreen = ({navigation}) => {
         style={styles.inputStyle}
         type="password"
         placeholder="Confirm password"
-        onChange={formik.handleChange('consfirmPassword')}
-        onBlur={formik.handleBlur('consfirmPassword')}
-        value={formik.values.consfirmPassword}
+        onChangeText={formik.handleChange('confirmPassword')}
+        onBlur={formik.handleBlur('confirmPassword')}
+        value={formik.values.confirmPassword}
         secureTextEntry={true}
       />
-      {formik.errors.consfirmPassword && formik.touched.consfirmPassword ? (
+      {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
         <Text style={styles.errorContainer}>
-          {formik.errors.consfirmPassword}
+          {formik.errors.confirmPassword}
         </Text>
       ) : null}
 
