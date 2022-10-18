@@ -11,9 +11,10 @@ import {
   Form,
 } from 'react-native';
 import {useFormik} from 'formik';
-// import firebase from '../Database/fireBaseDb';
-// import {auth} from '../Database/fireBaseDb';
-// import {createUserWithEmailAndPassword} from 'firebase/auth';
+
+import firestore from '@react-native-firebase/firestore';
+
+const usersCollection = firestore().collection('Users');
 
 const validate = values => {
   console.log('values', values);
@@ -53,16 +54,15 @@ const SignUpScreen = ({navigation}) => {
     },
     validate,
     onSubmit: values => {
-      // createUserWithEmailAndPassword(values.email, values.password)
-      //   .then(res => {
-      //     console.log(res, 'showdata');
-      //     (values.userName = ''),
-      //       (values.email = ''),
-      //       (values.password = ''),
-      //       (values.confirmPassword = '');
-      //     navigation.navigate('Login');
-      //   })
-      //   .catch(err => console.log(err, 'showError'));
+      firestore()
+        .collection('users')
+        .add({
+          Name: values.userName,
+          email: values.email,
+          password: values.password,
+        })
+        .then(res => console.log(res))
+        .then(err => console.log(err));
       Alert.alert('Account created successfully');
       navigation.navigate('Login');
     },
