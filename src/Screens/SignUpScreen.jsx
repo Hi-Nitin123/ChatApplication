@@ -13,6 +13,7 @@ import {
 import {useFormik} from 'formik';
 
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const usersCollection = firestore().collection('Users');
 
@@ -53,18 +54,23 @@ const SignUpScreen = ({navigation}) => {
       confirmPassword: '',
     },
     validate,
-    onSubmit: values => {
-      firestore()
-        .collection('users')
-        .add({
-          Name: values.userName,
-          email: values.email,
-          password: values.password,
+    onSubmit: async values => {
+      await auth()
+        .createUserWithEmailAndPassword(values.email, values.password)
+        .then(() => {
+          alert('User account created & signed in!');
         })
-        .then(res => console.log(res))
-        .then(err => console.log(err));
-      Alert.alert('Account created successfully');
-      navigation.navigate('Login');
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            alert('That email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            Alert.alert('That email address is invalid!');
+          }
+
+          console.error(error);
+        });
     },
   });
 
