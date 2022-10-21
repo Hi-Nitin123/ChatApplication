@@ -12,6 +12,10 @@ import {
 } from 'react-native';
 import {useFormik} from 'formik';
 
+import {async} from '@firebase/util';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+
 const validate = values => {
   console.log('called');
   const errors = {};
@@ -35,8 +39,27 @@ const LoginScreen = ({navigation}) => {
       password: '',
     },
     validate,
-    onSubmit: values => {
-      navigation.navigate('HomePage');
+    onSubmit: async values => {
+      console.log(values, 'showValues');
+      await auth()
+        .createUserWithEmailAndPassword(values.email, values.password)
+        .then(res => {
+          console.log(res, 'showResponse');
+          alert('User does not exis!');
+        })
+        .catch(error => {
+          console.log(error, 'showError');
+          if (error.code === 'auth/email-already-in-use') {
+            alert('Logged in successfully!!');
+            navigation.navigate('HomePage');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            alert('Email is invalid');
+          }
+
+          console.error(error);
+        });
     },
   });
 
@@ -47,7 +70,7 @@ const LoginScreen = ({navigation}) => {
       <View>
         <TextInput
           style={styles.inputStyle}
-          onChange={formik.handleChange('email')}
+          onChangeText={formik.handleChange('email')}
           onBlur={formik.handleBlur('email')}
           value={formik.values.email}
           placeholder="Enter Email"
@@ -60,7 +83,7 @@ const LoginScreen = ({navigation}) => {
           style={styles.inputStyle}
           dfg
           placeholder="Enter Password"
-          onChange={formik.handleChange('password')}
+          onChangeText={formik.handleChange('password')}
           onBlur={formik.handleBlur('password')}
           value={formik.values.password}
         />
