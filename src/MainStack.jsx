@@ -3,12 +3,23 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from './Screens/LoginScreen';
 import SignUpScreen from './Screens/SignUpScreen';
 import ChatScreen from './Screens/ChatScreen';
+import HomeScreen from './Screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
   return (
-    <Stack.Navigator initialRouteName="SignUp">
+    <Stack.Navigator
+      initialRouteName="HomeScreen"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#6646ee',
+        },
+        headerTintColor: '#ffffff',
+        headerTitleStyle: {
+          fontSize: 22,
+        },
+      }}>
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -23,8 +34,15 @@ const MainStack = () => {
       <Stack.Screen
         name="HomePage"
         component={ChatScreen}
+        options={({route}) => ({
+          title: route.params.thread.Name,
+        })}
+      />
+      <Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
         option
-        s={{title: 'Chat with your loved ones...'}}
+        s={{title: 'Friends'}}
       />
     </Stack.Navigator>
   );

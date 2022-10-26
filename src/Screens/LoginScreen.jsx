@@ -41,24 +41,18 @@ const LoginScreen = ({navigation}) => {
     validate,
     onSubmit: async values => {
       console.log(values, 'showValues');
+      // auth()
+      //   .signOut()
+      //   .then(() => console.log('User signed out!'));
       await auth()
-        .createUserWithEmailAndPassword(values.email, values.password)
+        .signInWithEmailAndPassword(values.email, values.password)
         .then(res => {
           console.log(res, 'showResponse');
-          alert('User does not exis!');
+          navigation.navigate('HomePage');
+          alert('User logged in successfully');
         })
-        .catch(error => {
-          console.log(error, 'showError');
-          if (error.code === 'auth/email-already-in-use') {
-            alert('Logged in successfully!!');
-            navigation.navigate('HomePage');
-          }
-
-          if (error.code === 'auth/invalid-email') {
-            alert('Email is invalid');
-          }
-
-          console.error(error);
+        .catch(() => {
+          alert('Something went wrong');
         });
     },
   });
@@ -75,7 +69,7 @@ const LoginScreen = ({navigation}) => {
           value={formik.values.email}
           placeholder="Enter Email"
         />
-        {console.log(formik.values.email, formik.values.password, 'showerr')}
+        {console.log(formik.values.email, formik.values.password, 'values')}
         {formik.errors.email && formik.touched.email ? (
           <Text style={styles.errorContainer}>{formik.errors.email}</Text>
         ) : null}

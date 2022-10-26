@@ -59,6 +59,7 @@ const SignUpScreen = ({navigation}) => {
         .createUserWithEmailAndPassword(values.email, values.password)
         .then(() => {
           alert('User account created & signed in!');
+          navigation.navigate('Login');
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
