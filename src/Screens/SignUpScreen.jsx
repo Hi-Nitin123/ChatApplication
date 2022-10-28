@@ -58,6 +58,12 @@ const SignUpScreen = ({navigation}) => {
       await auth()
         .createUserWithEmailAndPassword(values.email, values.password)
         .then(() => {
+          firestore().collection('users').add({
+            Name: values.userName,
+            email: values.email,
+            password: values.password,
+            confirmPassword: values.confirmPassword,
+          });
           alert('User account created & signed in!');
           navigation.navigate('Login');
         })
@@ -150,13 +156,13 @@ const SignUpScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
+    // display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     padding: 35,
     backgroundColor: '#fff',
-    fontWeight: 200,
-    alignItems: 'flex-end',
+    // fontWeight: 200,
+    // alignItems: 'flex-end',
   },
   inputStyle: {
     width: '100%',
@@ -181,15 +187,17 @@ const styles = StyleSheet.create({
   errorContainer: {
     fontSize: 15,
     color: 'red',
-    marginTop: -8,
-    marginLeft: -300,
+    // marginTop: -8,
+    marginLeft: 10,
+    alignSelf: 'flex-start',
   },
   preloader: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    position: 'absolute',
+    // left: 0,
+    // right: 0,
+    // top: 0,
+    // bottom: 0,
+    // position: 'absolute',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
