@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "967729979002",
+    "project_id": "chattingzone-9b217",
+    "storage_bucket": "chattingzone-9b217.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967729979002:android:c512bb1d68d29d3c4ea5c3",
+        "android_client_info": {
+          "package_name": "com.chatapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967729979002-k3r5c3nn850ma3mj70k7k806qr2lnh2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGawiQy0uCq-8YzMRAw86oGjcaC7e8BAk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967729979002-k3r5c3nn850ma3mj70k7k806qr2lnh2p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
