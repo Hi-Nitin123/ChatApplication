@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/cli-platform-android": "^9.2.1",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "^15.7.0",
     "@react-native-firebase/auth": "^15.7.0",
@@ -20,6 +21,8 @@
     "firebase": "^9.12.0",
     "firebase-admin": "^11.1.0",
     "formik": "^2.2.9",
+    "Math": "^0.0.1-security",
+    "mathjs": "^11.3.2",
     "react": "18.1.0",
     "react-native": "0.70.2",
     "react-native-gesture-handler": "^2.7.1",
@@ -28,7 +31,8 @@
     "react-native-reanimated": "^2.11.0",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

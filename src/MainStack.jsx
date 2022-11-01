@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 const MainStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="HomeScreen"
+      initialRouteName="Login"
       screenOptions={{
         headerStyle: {
           backgroundColor: '#6646ee',
@@ -34,9 +34,9 @@ const MainStack = () => {
       <Stack.Screen
         name="HomePage"
         component={ChatScreen}
-        options={({route}) => ({
-          title: route.params.thread.Name,
-        })}
+        // options={({route}) => ({
+        //   title: route.params.thread,
+        // })}
       />
       <Stack.Screen
         name="HomeScreen"

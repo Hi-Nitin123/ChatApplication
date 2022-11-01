@@ -4,7 +4,9 @@ import {List, Divider} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
 import {QuerySnapshot} from 'firebase/firestore';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({route, navigation}) {
+  const {userId, otherParam} = route.params;
+  console.log(userId, 'showFalanaId');
   const [threads, setThreads] = useState([]);
 
   /**
@@ -13,7 +15,7 @@ export default function HomeScreen({navigation}) {
   useEffect(() => {
     //const unsubscribe = await firestore().collection('Users').get();
     const unsubscribe = firestore()
-      .collection('chats')
+      .collection('users')
       .get()
       .then(querySnapshot => {
         let data = querySnapshot.docs.map(snapShot => snapShot.data());
@@ -46,13 +48,13 @@ export default function HomeScreen({navigation}) {
     <View style={styles.container}>
       <FlatList
         data={threads}
-        keyExtractor={item => item.Id}
+        keyExtractor={item => item.id}
         ItemSeparatorComponent={() => <Divider />}
         renderItem={({item}) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate('HomePage', {thread: item})}>
+            onPress={() => navigation.navigate('HomePage', {userId: item.id})}>
             <List.Item
-              title={item.user.name}
+              title={item.Name}
               description="Tap to Chat"
               titleNumberOfLines={1}
               titleStyle={styles.listTitle}

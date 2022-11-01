@@ -12,8 +12,6 @@ import {
 } from 'react-native';
 import {useFormik} from 'formik';
 
-import {async} from '@firebase/util';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 const validate = values => {
@@ -46,12 +44,14 @@ const LoginScreen = ({navigation}) => {
       //   .then(() => console.log('User signed out!'));
       await auth()
         .signInWithEmailAndPassword(values.email, values.password)
-        .then(res => {
-          console.log(res, 'showResponse');
-          navigation.navigate('HomePage');
+        .then(userCredential => {
+          const user = userCredential.user;
+
+          navigation.navigate('HomeScreen', {userId: user.uid});
           alert('User logged in successfully');
         })
-        .catch(() => {
+        .catch(err => {
+          console.log(err, 'LoginError');
           alert('Something went wrong');
         });
     },

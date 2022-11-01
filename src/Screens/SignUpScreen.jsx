@@ -5,17 +5,13 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ToastAndroid,
-  StatusBar,
   Alert,
-  Form,
 } from 'react-native';
 import {useFormik} from 'formik';
+// import Math from 'Math';
 
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-
-const usersCollection = firestore().collection('Users');
 
 const validate = values => {
   console.log('values', values);
@@ -57,12 +53,15 @@ const SignUpScreen = ({navigation}) => {
     onSubmit: async values => {
       await auth()
         .createUserWithEmailAndPassword(values.email, values.password)
-        .then(() => {
-          firestore().collection('users').add({
+        .then(userCredential => {
+          const user = userCredential.user;
+          console.log('showUser', user);
+          firestore().collection('users').doc(user.uid).set({
+            // id: uuidv4()
+            id: user.uid,
             Name: values.userName,
             email: values.email,
             password: values.password,
-            confirmPassword: values.confirmPassword,
           });
           alert('User account created & signed in!');
           navigation.navigate('Login');

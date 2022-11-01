@@ -1,103 +1,72 @@
-import React, {useCallback, useState, useLayoutEffect, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-
-import auth from '@react-native-firebase/auth';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  orderBy,
-  onSnapshot,
-  db,
-} from 'firebase/firestore';
+import React, {useState, useEffect} from 'react';
 import {GiftedChat} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
+import {QuerySnapshot} from 'firebase/firestore';
 
-const ChatScreen = ({navigation}) => {
-  const [messages, setMessages] = useState([]);
+export default function RoomScreen({route, navigation}) {
+  const {userId, otherParam} = route.params;
+  console.log(userId, 'gdjsagdjasgjhsgajhgsgsahgdjhasgdhgashdggdjhgdjhasgdjh');
+
+  const [messages, setMessages] = useState([
+    {
+      _id: 0,
+      text: 'New room created.',
+      createdAt: new Date().getTime(),
+      system: true,
+    },
+    // example of chat message
+    {
+      _id: 1,
+      text: 'Hello!',
+      createdAt: new Date().getTime(),
+      user: {
+        _id: 2,
+        name: 'Test User',
+      },
+    },
+  ]);
 
   useEffect(() => {
-    const subscriber = firestore()
-      .collection('chats')
-      .onSnapshot(querySnapshot => {
-        const messages = [];
-
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot, 'sdjsdfjhdsfjsjfsdjhasd');
-          messages.push({
-            ...documentSnapshot.data(),
-            Id: documentSnapshot.data().Id,
-            createdAt: documentSnapshot.data().createdAt.toDate(),
-            Text: documentSnapshot.data().Text,
-            user: documentSnapshot.data().user,
-          });
-        });
-
-        setMessages(messages);
-      });
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
-
-  const signOutNow = () => {
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!'));
-  };
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      // headerLeft: () => (
-      //   <View style={{marginLeft: 20}}>
-      //     <Image
-      //       source={{
-      //         uri: firestore.collection('chats').doc()
-      //       }}
-      //     />
-      //   </View>
-      // ),
-      headerRight: () => (
-        <TouchableOpacity
-          style={{
-            marginRight: 10,
-          }}
-          onPress={signOutNow}>
-          <Text>logout</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
-
-  const onSend = useCallback((messages = []) => {
-    const {Id, createdAt, Text, user} = messages[0];
-
-    debugger;
     firestore()
-      .collection('chats')
-      .add({
-        Id: Id,
-        createdAt: createdAt,
-        Text: Text,
-        user: user,
-      })
-      .then(() => {
-        console.log('User added!');
+      .collection('users')
+      .doc(userId)
+      .get()
+      .then(querySnapshot => {
+        setMessages(querySnapshot.data().text);
       });
   }, []);
+
+  // helper method that is sends a message
+  function handleSend(newMessage = []) {
+    console.log(newMessage);
+    setMessages(GiftedChat.append(messages, newMessage));
+    firestore()
+      .collection('users')
+      .doc(userId)
+      .update({
+        text: messages,
+      })
+      .then(res => {
+        console.log(res, 'msgresponse');
+      })
+      .catch(err => {
+        console.log(err, 'msgerror');
+      });
+  }
 
   return (
     <GiftedChat
       messages={messages}
-      showAvatarForEveryMessage={true}
-      onSend={messages => onSend(messages)}
-      user={{
-        Id: auth?.currentUser?.email,
-        name: auth?.currentUser?.displayName,
-        avatar: auth?.currentUser?.photoURL,
-      }}
+      onSend={newMessage => handleSend(newMessage)}
+      user={{_id: 1, name: 'User Test'}}
+      // renderBubble={renderBubble}
+      placeholder="Type your message here..."
+      showUserAvatar
+      alwaysShowSend
+      // renderSend={renderSend}
+      // scrollToBottomComponent={scrollToBottomComponent}
+      // Step 3: add the prop
+      // renderLoading={renderLoading}
     />
   );
-};
-
-export default ChatScreen;
+}
