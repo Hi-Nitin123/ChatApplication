@@ -48,6 +48,8 @@ export default function RoomScreen({route, navigation}) {
       })
       .then(res => {
         console.log(res, 'msgresponse');
+        console.log(messages, 'showMessages');
+        console.log(newMessage, 'showMessages');
       })
       .catch(err => {
         console.log(err, 'msgerror');
@@ -58,7 +60,7 @@ export default function RoomScreen({route, navigation}) {
     <GiftedChat
       messages={messages}
       onSend={newMessage => handleSend(newMessage)}
-      user={{_id: 1, name: 'User Test'}}
+      user={{id: 1, name: 'User Test'}}
       // renderBubble={renderBubble}
       placeholder="Type your message here..."
       showUserAvatar

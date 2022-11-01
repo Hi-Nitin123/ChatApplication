@@ -62,6 +62,7 @@ const SignUpScreen = ({navigation}) => {
             Name: values.userName,
             email: values.email,
             password: values.password,
+            text: [],
           });
           alert('User account created & signed in!');
           navigation.navigate('Login');
